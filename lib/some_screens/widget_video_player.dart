@@ -17,8 +17,8 @@ class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
     // TODO: implement initState
     super.initState();
     _videoController = VideoPlayerController.networkUrl(Uri.parse(
-        // "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
+        // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         ));
 
     _initializeVideoPlayerFuture = _videoController.initialize();
@@ -26,15 +26,15 @@ class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _videoController.dispose();
     super.dispose();
   }
 
+   
+  
+
   @override
   Widget build(BuildContext context) {
-    bool pauseVisible = true;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,59 +42,42 @@ class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
         title: const Text("Video Player"),
       ),
       body: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return InkWell(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Stack(children: [
-                    AspectRatio(
-                      aspectRatio: _videoController.value.aspectRatio,
-                      child: VideoPlayer(_videoController),
-                    ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: 
-                        pauseVisible ? InkWell(
-                          child: Icon(
-                            _videoController.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                            size: 48,
-                          ),
-                          onTap: () {
-                            // pauseVisible=true;
-                            setState(() {
-                              if (_videoController.value.isPlaying) {
-                                _videoController.pause();
-                              } else {
-                                _videoController.play();
-                                print("pause clicked");
-                                pauseVisible = false;
-                              }
-                            });
-                          },
+          future: _initializeVideoPlayerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return InkWell(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Stack(children: [
+                        AspectRatio(
+                          aspectRatio: _videoController.value.aspectRatio,
+                          child: VideoPlayer(_videoController),
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: _videoController.value.isPlaying
+                              ? Text("")
+                              : Icon(
+                                  _videoController.value.isPlaying
+                                      ? Icons.pause
+                                      : Icons.play_arrow,
+                                  size: 48,
+                                ),
                         )
-                        : Text(""),
-                    ),
-                        // FloatingActionButton(
-                        //   onPressed: () {
-                        //   },
-                        //   child: Icon(_videoController.value.isPlaying
-                        //       ? Icons.pause
-                        //       : Icons.play_arrow),
-                        // )
-                  ])
-                ]),
+                      ])
+                    ]),
                 onTap: () {
                   setState(() {
-                    if (!pauseVisible) pauseVisible = true;
+                    if (_videoController.value.isPlaying) {
+                      _videoController.pause();
+                    } else {
+                      _videoController.play();
+                    }
                   });
                 },
               );
@@ -104,8 +87,4 @@ class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
           }),
     );
   }
-}
-
-class PlayPauseIcon {
-  
 }
