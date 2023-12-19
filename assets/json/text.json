@@ -1,15 +1,15 @@
 {
   "TextView": {
     "Text": "My Button",
-    "FontSize": 20,
+    "FontSize": 20.0,
     "Description": "My Text Description",
-    "DescriptionFontSize": 16,
+    "DescriptionFontSize": 16.0,
     "FontColor": "#000000",
     "FontWeight": "normal",
     "FontType": "",
     "NumberOfLines": 4,
-    "BackgroundColor": "#808080",
+    "BackgroundColor": "#EAEAEA",
     "Margin": 8.0,
-    "Padding": 5.0
+    "Padding": 8.0
   }
 }

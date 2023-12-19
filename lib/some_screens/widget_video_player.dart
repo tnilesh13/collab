@@ -11,128 +11,152 @@ class WidgetVideoPlayer extends StatefulWidget {
 }
 
 class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
-  VideoPlayerController? _videoController;
-   Future<void>? _initializeVideoPlayerFuture;
-   Map<dynamic, dynamic>? myMap;
-   String? srcc;
+  Map<String, dynamic>? myMap;
 
   @override
   void initState() {
     super.initState();
 
     ReadJsonFile.readJsonData(path: "assets/json/video.json").then((value) {
-      // setState(() {
+      setState(() {
         myMap = value["VideoView"];
-        // print("myMapppp$myMap");
-        print("mysrccccccc${myMap!['Src']}");
-     srcc = myMap!["Src"];
-      // });
+      });
     });
-        print("mysrccccccc$srcc");
-    _videoController =
-        VideoPlayerController.networkUrl(Uri.parse(srcc!));
-
-    _initializeVideoPlayerFuture = _videoController!.initialize();
-  }
-
-  @override
-  void dispose() {
-    _videoController!.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // var textColor = Util.getColorFromHex(myMap!["TextView"]["FontColor"]);
-    // var bgColor = Util.getColorFromHex(myMap!["BackgroundColor"]);
+    var textColor =
+        Util.getColorFromHex(myMap!["TextView"]["FontColor"]);
+    var bgColor = Util.getColorFromHex(myMap!["BackgroundColor"]);
 
+    return Container(
+      margin: EdgeInsets.all(myMap!["Margin"]),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(myMap!["Radius"]),
+        color: bgColor,
+      ),
+      width: double.infinity,
+      // color: bgColor,
+      child: Column(
+        children: [
+          MyVideo(myMap),
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(138, 124, 4, 0),
-          title: const Text("Video Player"),
-        ),
-        body: Container(
-          width: double.infinity,
-          // color: bgColor,
-          child: Column(
-            children: [
-              MyVideo(_videoController!, _initializeVideoPlayerFuture!),
-              // Text(
-              //   myMap!["TextView"]["Description"],
-              //   style: TextStyle(
-              //       color: textColor,
-              //       fontWeight: FontWeight.bold,
-              //       fontSize: myMap!["TextView"]['DescriptionFontSize']),
-              // ),
-            ],
-          ),
-        ));
+                  Padding(
+                    padding: EdgeInsets.all(myMap!["Padding"]),
+                    child: Text(
+                      myMap!["TextView"]["Description"],
+                      style: TextStyle(
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: myMap!["TextView"]
+                              ['DescriptionFontSize']),
+                    ),
+                  ),
+        ],
+      ),
+    );
   }
 }
 
 class MyVideo extends StatefulWidget {
-  late VideoPlayerController _videoController;
-  late Future<void> _initializeVideoPlayerFuture;
-  MyVideo(this._videoController, this._initializeVideoPlayerFuture);
+  Map<String, dynamic>? myMap;
+  VideoPlayerController? _videoController;
+  Future<void>? _initializeVideoPlayerFuture;
+  MyVideo(this.myMap);
 
   @override
   State<MyVideo> createState() => _MyVideoState();
 }
 
 class _MyVideoState extends State<MyVideo> {
+  String? srcc;
+  @override
+  void initState() {
+    super.initState();
+    srcc = widget.myMap!["Src"];
+
+    widget._videoController =
+        VideoPlayerController.networkUrl(Uri.parse(srcc!));
+    print("mysrccccccc12$srcc");
+
+    widget._initializeVideoPlayerFuture = widget._videoController!.initialize();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var textColor =
+        Util.getColorFromHex(widget.myMap!["TextView"]["FontColor"]);
     return FutureBuilder(
         future: widget._initializeVideoPlayerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return InkWell(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(children: [
-                      AspectRatio(
-                        aspectRatio: widget._videoController.value.aspectRatio,
-                        child: VideoPlayer(widget._videoController),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: widget._videoController.value.isPlaying
-                            ? Text("")
-                            : Icon(
-                                widget._videoController.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                                size: 48,
-                              ),
-                      )
-                    ])
-                  ]),
-              onTap: () {
-                setState(() {
-                  if (widget._videoController.value.isPlaying) {
-                    widget._videoController.pause();
-                  } else {
-                    widget._videoController.play();
-                  }
-                });
-              },
+            return Padding(
+              padding: EdgeInsets.all(widget.myMap!["Margin"]),
+              child: InkWell(
+                child: Stack(children: [
+                  AspectRatio(
+                    aspectRatio: widget._videoController!.value.aspectRatio,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(widget.myMap!["Radius"]),
+                      child: VideoPlayer(widget._videoController!),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: widget._videoController!.value.isPlaying
+                        ? Text("")
+                        : Icon(
+                            widget._videoController!.value.isPlaying
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                            size: 48,
+                          ),
+                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.all(widget.myMap!["Padding"]),
+                  //   child: Text(
+                  //     widget.myMap!["TextView"]["Description"],
+                  //     style: TextStyle(
+                  //         color: textColor,
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: widget.myMap!["TextView"]
+                  //             ['DescriptionFontSize']),
+                  //   ),
+                  // ),
+                ]),
+                onTap: () {
+                  setState(() {
+                    if (widget._videoController!.value.isPlaying) {
+                      widget._videoController!.pause();
+                    } else {
+                      widget._videoController!.play();
+                    }
+                  });
+                },
+              ),
             );
           } else {
-            return CircularProgressIndicator();
+            return Padding(
+                padding: EdgeInsets.all(widget.myMap!["TextView"]["Padding"]),
+                child: const SizedBox(
+                  height: 40.0,
+                  // width: 10.0,
+                  child: Center(child: CircularProgressIndicator()),
+                ));
+
+            //  CircularProgressIndicator();
           }
         });
   }
-  
+
   @override
   void dispose() {
-    widget._videoController.dispose();
+    widget._videoController!.dispose();
     super.dispose();
   }
 }

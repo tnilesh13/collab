@@ -2,19 +2,19 @@
   "VideoView": {
     "Src": "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4",
     "ContainerColor": "#808080",
-    "BackgroundColor": "#808080",
+    "BackgroundColor": "#EAEAEA",
     "Margin": 8.0,
-    "Padding": 5.0,
+    "Padding": 8.0,
+    "Radius": 19.0,
 
     "TextView": {
-      "DescriptionFontSize": 16,
+      "DescriptionFontSize": 16.0,
       "FontColor": "#000000",
       "FontWeight": "normal",
-      
       "NumberOfLines": 4,
-      "BackgroundColor2": "#808080",
+      "BackgroundColor2": "#EAEAEA",
       "Margin": 8.0,
-      "Padding": 5.0,
+      "Padding": 8.0,
       "Description": "My TextView Description"
     }
   }

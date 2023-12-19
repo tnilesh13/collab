@@ -10,7 +10,7 @@ class WidgetImage1 extends StatefulWidget {
 }
 
 class _WidgetImage1State extends State<WidgetImage1> {
-  late Map<dynamic, dynamic> myMap;
+  Map<dynamic, dynamic>? myMap;
 
   @override
   void initState() {
@@ -28,25 +28,39 @@ class _WidgetImage1State extends State<WidgetImage1> {
 
   @override
   Widget build(BuildContext context) {
-    var textColor = Util.getColorFromHex(myMap["TextView"]["FontColor"]);
-    var bgColor = Util.getColorFromHex(myMap["BackgroundColor"]);
+    var textColor = Util.getColorFromHex(myMap!["TextView"]["FontColor"]);
+    var bgColor = Util.getColorFromHex(myMap!["BackgroundColor"]);
 
     return Container(
+        margin: EdgeInsets.all(myMap!["Margin"]),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(myMap!["Radius"]),
+          color: bgColor,
+        ),
         width: double.infinity,
-        color: bgColor,
+        // color: bgColor,
         child: Column(children: [
-          Image.network(
-            myMap["Src"],
-            fit: BoxFit.cover,
-            width: double.infinity,
+          Padding(
+            padding: EdgeInsets.all(myMap!["Padding"]),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(myMap!["Radius"]),
+              child: Image.network(
+                myMap!["Src"],
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
+            ),
           ),
-          Text(
-            myMap["TextView"]["Description"],
-            style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.bold,
-                fontSize: myMap["TextView"]['DescriptionFontSize']),
-          ),
+          Padding(
+            padding: EdgeInsets.all(myMap!["TextView"]["Padding"]),
+            child: Text(
+              myMap!["TextView"]["Description"],
+              style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: myMap!["TextView"]['DescriptionFontSize']),
+            ),
+          )
         ]));
   }
 }

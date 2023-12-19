@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
-        home: MyDashboard());
+        home: HomeScreen());
   }
 }
 
@@ -33,16 +33,22 @@ class MyDashboard extends StatelessWidget{
         backgroundColor: Colors.amber,
         title: const Text("Slider Example"),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             // WidgetImageSlider(),
             // ProductBar(),
             
-            // WidgetText(),
-            // WidgetImage1(),
-            WidgetVideoPlayer(),
+            WidgetText(),
+            SizedBox(height: 10),
+            WidgetImage1(),
+            SizedBox(height: 10),
+            // SizedBox(
+            //   height: 275,
+              // child:
+               WidgetVideoPlayer()
+              // ),
           ],
         ),
       )

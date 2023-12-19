@@ -11,7 +11,7 @@ class WidgetText extends StatefulWidget {
 
 class _WidgetTextState extends State<WidgetText> {
 
-  late Map<dynamic, dynamic> myMap;
+  Map<dynamic, dynamic>? myMap;
   
   @override
   void initState() {
@@ -29,17 +29,21 @@ class _WidgetTextState extends State<WidgetText> {
   
   @override
   Widget build(BuildContext context) {
-  var textColor = Util.getColorFromHex(myMap["FontColor"]);
-  var bgColor = Util.getColorFromHex(myMap["BackgroundColor"]);
+  var textColor = Util.getColorFromHex(myMap!["FontColor"]);
+  var bgColor = Util.getColorFromHex(myMap!["BackgroundColor"]);
 
     return Container(
+      margin: EdgeInsets.all(myMap!["Margin"]),
       width: double.infinity,
       color: bgColor,
-      child: Column(
-        children: [
-          Text(myMap["Text"], style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: myMap['FontSize']),),
-          Text(myMap["Description"], style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: myMap['DescriptionFontSize']),),
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(myMap!["Padding"]),
+        child: Column(
+          children: [
+            Text(myMap!["Text"], style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: myMap!['FontSize']),),
+            Text(myMap!["Description"], style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: myMap!['DescriptionFontSize']),),
+          ],
+        ),
       ),
     );
             
