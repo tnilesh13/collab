@@ -12,7 +12,6 @@ class WidgetText extends StatefulWidget {
 class _WidgetTextState extends State<WidgetText> {
 
   late Map<dynamic, dynamic> myMap;
-  // var myNewList;
   
   @override
   void initState() {
@@ -22,14 +21,7 @@ class _WidgetTextState extends State<WidgetText> {
     ReadJsonFile.readJsonData(path: "assets/json/text.json").then((value) {
       setState(() {
         myMap = value["TextView"];
-        // print("valueeee$value");
         print("myMapppp$myMap");
-        // // print("itttemss2${myMap["Items"]}");
-        // myNewList = myMap["Items"];
-        // print("myNewListttttt$myNewList");
-        // print("toString${myNewList.toString()}");
-        // // print("myNewListttttt$myNewList}");
-        // print("myyyyyyyyy${myNewList[0]}");
       });
     });
   }

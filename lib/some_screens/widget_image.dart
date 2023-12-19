@@ -1,21 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/helper/util.dart';
+import 'package:new_app/some_screens/read_json.dart';
 
-class WidgetImage1 extends StatelessWidget {
+class WidgetImage1 extends StatefulWidget {
   const WidgetImage1({super.key});
 
   @override
+  State<WidgetImage1> createState() => _WidgetImage1State();
+}
+
+class _WidgetImage1State extends State<WidgetImage1> {
+  late Map<dynamic, dynamic> myMap;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    ReadJsonFile.readJsonData(path: "assets/json/image.json").then((value) {
+      setState(() {
+        myMap = value["ImageView"];
+        // print("myMapppp$myMap");
+        // print("mytxtdesc${myMap["TextView"]["Description"]}");
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          child: Image.network(
-            "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    var textColor = Util.getColorFromHex(myMap["TextView"]["FontColor"]);
+    var bgColor = Util.getColorFromHex(myMap["BackgroundColor"]);
+
+    return Container(
+        width: double.infinity,
+        color: bgColor,
+        child: Column(children: [
+          Image.network(
+            myMap["Src"],
             fit: BoxFit.cover,
-            width: double.infinity,),
-        ),
-        Text("")
-      ],
-    );     
+            width: double.infinity,
+          ),
+          Text(
+            myMap["TextView"]["Description"],
+            style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: myMap["TextView"]['DescriptionFontSize']),
+          ),
+        ]));
   }
 }

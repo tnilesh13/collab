@@ -1,6 +1,6 @@
 {
   "ImageView": {
-    "Src": "",
+    "Src": "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "Radius": 19,
     "ContainerColor": "#808080",
     "BackgroundColor": "#808080",
@@ -8,15 +8,15 @@
     "Padding": 5.0,
 
     "TextView": {
-      "FontSize": 16,
+      "DescriptionFontSize": 16,
       "FontColor": "#000000",
       "FontWeight": "normal",
       "FontType": "",
       "NumberOfLines": 4,
-      "BackgroundColor": "#808080",
+      "BackgroundColor2": "#808080",
       "Margin": 8.0,
       "Padding": 5.0,
-      "Text": "My Button"
+      "Description": "My TextView Description"
     }
   }
 }

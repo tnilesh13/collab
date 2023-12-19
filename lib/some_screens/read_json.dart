@@ -10,7 +10,7 @@ class ReadJsonFile {
 
     var list = json.decode(jsonData) as Map;
 
-    print("listtt$list");
+    // print("listtt$list");
 
     return list;
   }

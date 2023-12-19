@@ -40,9 +40,9 @@ class MyDashboard extends StatelessWidget{
             // WidgetImageSlider(),
             // ProductBar(),
             
+            // WidgetText(),
             // WidgetImage1(),
-            WidgetText(),
-            // WidgetVideoPlayer(),
+            WidgetVideoPlayer(),
           ],
         ),
       )

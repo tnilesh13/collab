@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/helper/util.dart';
+import 'package:new_app/some_screens/read_json.dart';
 import 'package:video_player/video_player.dart';
 
 class WidgetVideoPlayer extends StatefulWidget {
@@ -9,82 +11,128 @@ class WidgetVideoPlayer extends StatefulWidget {
 }
 
 class _WidgetVideoPlayerState extends State<WidgetVideoPlayer> {
-  late VideoPlayerController _videoController;
-  late Future<void> _initializeVideoPlayerFuture;
+  VideoPlayerController? _videoController;
+   Future<void>? _initializeVideoPlayerFuture;
+   Map<dynamic, dynamic>? myMap;
+   String? srcc;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _videoController = VideoPlayerController.networkUrl(Uri.parse(
-        "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4"
-        // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        ));
 
-    _initializeVideoPlayerFuture = _videoController.initialize();
+    ReadJsonFile.readJsonData(path: "assets/json/video.json").then((value) {
+      // setState(() {
+        myMap = value["VideoView"];
+        // print("myMapppp$myMap");
+        print("mysrccccccc${myMap!['Src']}");
+     srcc = myMap!["Src"];
+      // });
+    });
+        print("mysrccccccc$srcc");
+    _videoController =
+        VideoPlayerController.networkUrl(Uri.parse(srcc!));
+
+    _initializeVideoPlayerFuture = _videoController!.initialize();
   }
 
   @override
   void dispose() {
-    _videoController.dispose();
+    _videoController!.dispose();
     super.dispose();
   }
 
-   
-  
-
   @override
   Widget build(BuildContext context) {
+    // var textColor = Util.getColorFromHex(myMap!["TextView"]["FontColor"]);
+    // var bgColor = Util.getColorFromHex(myMap!["BackgroundColor"]);
+
+
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(138, 124, 4, 0),
-        title: const Text("Video Player"),
-      ),
-      body: FutureBuilder(
-          future: _initializeVideoPlayerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return InkWell(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Stack(children: [
-                        AspectRatio(
-                          aspectRatio: _videoController.value.aspectRatio,
-                          child: VideoPlayer(_videoController),
-                        ),
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: _videoController.value.isPlaying
-                              ? Text("")
-                              : Icon(
-                                  _videoController.value.isPlaying
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                  size: 48,
-                                ),
-                        )
-                      ])
-                    ]),
-                onTap: () {
-                  setState(() {
-                    if (_videoController.value.isPlaying) {
-                      _videoController.pause();
-                    } else {
-                      _videoController.play();
-                    }
-                  });
-                },
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
-          }),
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(138, 124, 4, 0),
+          title: const Text("Video Player"),
+        ),
+        body: Container(
+          width: double.infinity,
+          // color: bgColor,
+          child: Column(
+            children: [
+              MyVideo(_videoController!, _initializeVideoPlayerFuture!),
+              // Text(
+              //   myMap!["TextView"]["Description"],
+              //   style: TextStyle(
+              //       color: textColor,
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: myMap!["TextView"]['DescriptionFontSize']),
+              // ),
+            ],
+          ),
+        ));
+  }
+}
+
+class MyVideo extends StatefulWidget {
+  late VideoPlayerController _videoController;
+  late Future<void> _initializeVideoPlayerFuture;
+  MyVideo(this._videoController, this._initializeVideoPlayerFuture);
+
+  @override
+  State<MyVideo> createState() => _MyVideoState();
+}
+
+class _MyVideoState extends State<MyVideo> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: widget._initializeVideoPlayerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return InkWell(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(children: [
+                      AspectRatio(
+                        aspectRatio: widget._videoController.value.aspectRatio,
+                        child: VideoPlayer(widget._videoController),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: widget._videoController.value.isPlaying
+                            ? Text("")
+                            : Icon(
+                                widget._videoController.value.isPlaying
+                                    ? Icons.pause
+                                    : Icons.play_arrow,
+                                size: 48,
+                              ),
+                      )
+                    ])
+                  ]),
+              onTap: () {
+                setState(() {
+                  if (widget._videoController.value.isPlaying) {
+                    widget._videoController.pause();
+                  } else {
+                    widget._videoController.play();
+                  }
+                });
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
+  }
+  
+  @override
+  void dispose() {
+    widget._videoController.dispose();
+    super.dispose();
   }
 }

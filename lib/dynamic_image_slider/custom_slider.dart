@@ -62,6 +62,7 @@ class _CustomSliderState extends State<CustomSlider> {
                 child: CarouselSlider(
                   
                   items: carouselItems,
+                  
                   carouselController: carouselController,
                   options: CarouselOptions(
                     
